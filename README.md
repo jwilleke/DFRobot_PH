@@ -1,22 +1,23 @@
-## DFRobot_PH
+# DFRobot_PH
 
-* [中文版](./README_CN.md)
+> This is a modifed Library to overcome issue found in the vendor provided code found on Github [DFRobot_PH](https://github.com/DFRobot/DFRobot_PH)
 
-This is the sample code for Gravity: Analog pH Sensor / Meter Kit V2, SKU:SEN0161-V2
+This is the sample code for Gravity: Analog pH Sensor / Meter Kit V2, SKU:SEN0161-V2 [Product Link](https://www.dfrobot.com/product-1782.html) SKU: SEN0161-V2
 
-![产品效果图](./resources/images/SEN0161-V2.png)
+This has only been tested on:
 
-## Product Link ([https://www.dfrobot.com/product-1782.html](https://www.dfrobot.com/product-1782.html))
-    SKU: SEN0161-V2
+- platform = renesas-ra
+- board = uno_r4_wifi
+- framework = arduino
 
 ## Table of Contents
 
-  * [Summary](#summary)
-  * [Installation](#installation)
-  * [Methods](#methods)
-  * [Compatibility](#compatibility)
-  * [History](#history)
-  * [Credits](#credits)
+- [Summary](#summary)
+- [Installation](#installation)
+- [Methods](#methods)
+- [Compatibility](#compatibility)
+- [History](#history)
+- [Credits](#credits)
 
 ## Summary
 
@@ -24,9 +25,8 @@ Analog pH meter V2 is specifically designed to measure the pH of the solution an
 
 ## Installation
 
-To use this library, first download the library file, paste it into the \Arduino\libraries directory, then open the examples folder and run the demo in the folder.<br>
-Depends library: https://github.com/DFRobot/DFRobot_EC
-
+To use this library, first download the library file, paste it into the \Arduino\libraries directory, then open the examples folder and run the demo in the folder.
+Depends library: <https://github.com/DFRobot/DFRobot_EC>
 
 ## Methods
 
@@ -64,9 +64,9 @@ Depends library: https://github.com/DFRobot/DFRobot_EC
 
 MCU                | Work Well | Work Wrong | Untested  | Remarks
 ------------------ | :----------: | :----------: | :---------: | -----
-Arduino Uno  |      √       |             |            | 
-Leonardo  |      √       |             |            | 
-Meag2560 |      √       |             |            | 
+Arduino Uno  |      √       |             |            |
+Leonardo  |      √       |             |            |
+Meag2560 |      √       |             |            |
 esp32 series   |              |     x       |            |
 
 ## History
@@ -75,4 +75,6 @@ esp32 series   |              |     x       |            |
 
 ## Credits
 
-Written by Jiawei Zhang(jiawei.zhang@dfrobot.com), 2018. (Welcome to our [website](https://www.dfrobot.com/))
+Written by Jiawei Zhang(<jiawei.zhang@dfrobot.com>), 2018. (Welcome to our [website](https://www.dfrobot.com/))
+
+Modified 2024-01-18 by @jwilleke
