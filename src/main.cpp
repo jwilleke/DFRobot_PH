@@ -24,6 +24,8 @@
 #include <WiFiUdp.h>   // works with the Ardiuno R4 WiFi
 #include "RTC.h"       // works with the Ardiuno R4 WiFi
 #include <NTPClient.h> //Include the NTP library
+#include <GravityTemperature.h>
+#include <OneWire.h>
 
 ///////please enter your sensitive data in the Secret tab/arduino_secrets.h
 char ssid[] = SECRET_SSID; // your network SSID (name)
@@ -34,10 +36,12 @@ WiFiUDP Udp; // A UDP instance to let us send and receive packets over UDP
 NTPClient timeClient(Udp);
 
 RTCTime currentTime;
-
-
+int TEMPPIN = 2; // tempSensor pin for OneWire
 #define PH_PIN A1
+
 #define TIME_HEADER "T " // Header tag for serial time sync message
+
+GravityTemperature tempSensor(TEMPPIN);
 
 float temperature = 17.8; // assumes temperature is this value in C if not using temperature sensor
 float voltage, phValue;
@@ -152,9 +156,10 @@ void loop()
   if (millis() - timepoint > 1000U)
   { // time interval: 1s
     timepoint = millis();
+    tempSensor.update();
     consolePrintData();
     Serial.print(", ");
-    // temperature = readTemperature();         // read your temperature sensor to execute temperature compensation
+    temperature = tempSensor.getValue();        // read your temperature sensor to execute temperature compensation
     voltage = analogRead(PH_PIN) / 1024.0 * 5000; // read the voltage
     phValue = ph.readPH(voltage, temperature);    // convert voltage to pH with temperature compensation
     Serial.print("temperature: ");
@@ -166,7 +171,4 @@ void loop()
   ph.calibration(voltage, temperature); // calibration process by Serail CMD
 }
 
-float readTemperature()
-{
-  // add your code here to get the temperature from your temperature sensor
-}
+
