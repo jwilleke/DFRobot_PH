@@ -78,3 +78,9 @@ esp32 series   |              |     x       |            |
 Written by Jiawei Zhang(<jiawei.zhang@dfrobot.com>), 2018. (Welcome to our [website](https://www.dfrobot.com/))
 
 Modified 2024-01-18 by @jwilleke
+
+## Documentation
+
+These relevent links about the code asembley and usage.
+
+- [pH Sensor: Assembling, Coding, & Calibrating with Arduino | Smart Gardening](https://youtu.be/4pDPzQdSmqg?si=dzb_fMUkUV_Hh3ww)
