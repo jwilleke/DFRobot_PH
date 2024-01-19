@@ -58,10 +58,12 @@ void connectToWiFi()
   // check for the WiFi module:
   if (WiFi.status() == WL_NO_MODULE)
   {
-    Serial.println("Communication with WiFi module failed!");
+    Serial.println("Waiting for Communication with WiFi Connection!");
     // don't continue
     while (true)
       ;
+    Serial.println("Connected to WiFi");
+    printWifiStatus();
   }
 
   String fv = WiFi.firmwareVersion();
@@ -82,64 +84,86 @@ void connectToWiFi()
     delay(10000);
   }
 }
-  void printDigits(int digits)
-  {
-    // utility function for digital clock display: prints preceding colon and leading 0
-    Serial.print(":");
-    if (digits < 10)
-      Serial.print('0');
-    Serial.print(digits);
-  }
+void printDigits(int digits)
+{
+  // utility function for digital clock display: prints preceding colon and leading 0
+  Serial.print(":");
+  if (digits < 10)
+    Serial.print('0');
+  Serial.print(digits);
+}
 
 #define PH_PIN A1
-#define TIME_HEADER "T" // Header tag for serial time sync message
+#define TIME_HEADER "T " // Header tag for serial time sync message
 
-  float voltage, phValue, temperature = 25; // assumes temperature is 25 C if not using temperature sensor
-  DFRobot_PH ph;
+float voltage, phValue, temperature = 25; // assumes temperature is 25 C if not using temperature sensor
+DFRobot_PH ph;
 
-  void consolePrintData()
-  {
-    RTC.getTime(currentTime);
-    // Serial.print(currentTime.getYear());
-    // Serial.print("-");
-    // Serial.print(Month2int(currentTime.getMonth()));
-    // Serial.print("-");
-    // Serial.print(currentTime.getDayOfMonth());
-    Serial.print("T");
-    Serial.print(currentTime.getHour());
-    Serial.print(":");
-    Serial.print(currentTime.getMinutes());
-    Serial.print(":");
-    Serial.print(currentTime.getSeconds());
+void consolePrintData()
+{
+  RTC.getTime(currentTime);
+  // Serial.print(currentTime.getYear());
+  // Serial.print("-");
+  // Serial.print(Month2int(currentTime.getMonth()));
+  // Serial.print("-");
+  // Serial.print(currentTime.getDayOfMonth());
+  Serial.print(TIME_HEADER);
+  Serial.print(currentTime.getHour());
+  Serial.print(":");
+  Serial.print(currentTime.getMinutes());
+  Serial.print(":");
+  Serial.print(currentTime.getSeconds());
+}
+
+void setup()
+{
+  Serial.begin(115200);
+  while (!Serial);
+  connectToWiFi();
+  RTC.begin();
+  Serial.println("Starting connection to NTP server...");
+  timeClient.begin();
+  timeClient.update();
+
+  // Get the current date and time from an NTP server and convert
+  // it to UTC +2 by passing the time zone offset in hours.
+  // You may change the time zone offset to your local one.
+  auto timeZoneOffsetHours = -5;
+  auto unixTime = timeClient.getEpochTime() + (timeZoneOffsetHours * 3600);
+  Serial.print("Unix time = ");
+  Serial.println(unixTime);
+  RTCTime timeToSet = RTCTime(unixTime);
+  RTC.setTime(timeToSet);
+
+  // Retrieve the date and time from the RTC and print them
+  RTCTime currentTime;
+  RTC.getTime(currentTime); 
+  Serial.println("The RTC was just set to: " + String(currentTime));
+
+  ph.begin();
+}
+
+void loop()
+{
+  static unsigned long timepoint = millis();
+  if (millis() - timepoint > 1000U)
+  { // time interval: 1s
+    timepoint = millis();
+    consolePrintData();
+    Serial.print(", ");
+    // temperature = readTemperature();         // read your temperature sensor to execute temperature compensation
+    voltage = analogRead(PH_PIN) / 1024.0 * 5000; // read the voltage
+    phValue = ph.readPH(voltage, temperature);    // convert voltage to pH with temperature compensation
+    Serial.print("temperature: ");
+    Serial.print(temperature, 1);
+    Serial.print("\xC2\xB0");
+    Serial.print("C, pH: ");
+    Serial.println(phValue, 2);
   }
+  ph.calibration(voltage, temperature); // calibration process by Serail CMD
+}
 
-  void setup()
-  {
-    Serial.begin(115200);
-    RTC.begin();
-    ph.begin();
-  }
-
-  void loop()
-  {
-    static unsigned long timepoint = millis();
-    if (millis() - timepoint > 1000U)
-    { // time interval: 1s
-      timepoint = millis();
-      consolePrintData();
-      Serial.print(", ");
-      // temperature = readTemperature();         // read your temperature sensor to execute temperature compensation
-      voltage = analogRead(PH_PIN) / 1024.0 * 5000; // read the voltage
-      phValue = ph.readPH(voltage, temperature);    // convert voltage to pH with temperature compensation
-      Serial.print("temperature:");
-      Serial.print(temperature, 1);
-      Serial.print("^C  pH:");
-      Serial.println(phValue, 2);
-    }
-    ph.calibration(voltage, temperature); // calibration process by Serail CMD
-  }
-
-  float readTemperature()
-  {
-    // add your code here to get the temperature from your temperature sensor
-  }
+float readTemperature()
+{
+  // add your code here to get the temperature from your temperature sensor
+}
