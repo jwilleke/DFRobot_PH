@@ -35,6 +35,14 @@ NTPClient timeClient(Udp);
 
 RTCTime currentTime;
 
+
+#define PH_PIN A1
+#define TIME_HEADER "T " // Header tag for serial time sync message
+
+float temperature = 17.8; // assumes temperature is this value in C if not using temperature sensor
+float voltage, phValue;
+DFRobot_PH ph;
+
 void printWifiStatus()
 {
   // print the SSID of the network you're attached to:
@@ -93,11 +101,6 @@ void printDigits(int digits)
   Serial.print(digits);
 }
 
-#define PH_PIN A1
-#define TIME_HEADER "T " // Header tag for serial time sync message
-
-float voltage, phValue, temperature = 25; // assumes temperature is 25 C if not using temperature sensor
-DFRobot_PH ph;
 
 void consolePrintData()
 {

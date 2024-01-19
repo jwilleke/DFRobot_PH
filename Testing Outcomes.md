@@ -48,6 +48,16 @@ T 12:16:53, temperature: 25.0°C, pH: 3.29
 T 12:16:54, temperature: 25.0°C, pH: 3.24
 T 12:16:55, temperature: 25.0°C, pH: 3.35
 T 12:16:56, temperature: 25.0°C, pH: 3.35
-# pH 7 solution 
-
+# temperature staticlly adjusted ot tap water temp
+T 12:24:49, temperature: 17.8°C, pH: 7.58
+T 12:24:50, temperature: 17.8°C, pH: 7.56
+T 12:24:51, temperature: 17.8°C, pH: 7.61
+T 12:24:52, temperature: 17.8°C, pH: 7.61
+T 12:24:53, temperature: 17.8°C, pH: 7.67
+T 12:24:54, temperature: 17.8°C, pH: 7.58
+T 12:24:55, temperature: 17.8°C, pH: 7.64
+T 12:24:56, temperature: 17.8°C, pH: 7.64
+T 12:24:57, temperature: 17.8°C, pH: 7.67
+T 12:24:58, temperature: 17.8°C, pH: 7.64
+T 12:24:59, temperature: 17.8°C, pH: 7.64
 ```
