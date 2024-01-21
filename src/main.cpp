@@ -32,18 +32,20 @@ char ssid[] = SECRET_SSID; // your network SSID (name)
 char pass[] = SECRET_PASS; // your network password (use for WPA, or use as key for WEP)
 
 int wifiStatus = WL_IDLE_STATUS;
+
+// RTC Items
 WiFiUDP Udp; // A UDP instance to let us send and receive packets over UDP
 NTPClient timeClient(Udp);
-
 RTCTime currentTime;
-int TEMPPIN = 2; // tempSensor pin for OneWire
-#define PH_PIN A1
-
 #define TIME_HEADER "T " // Header tag for serial time sync message
 
+// GravityTemperature
+int TEMPPIN = 2; // tempSensor pin for OneWire
 GravityTemperature tempSensor(TEMPPIN);
-
 float temperature = 17.8; // assumes temperature is this value in C if not using temperature sensor
+
+// PH Items
+#define PH_PIN A4
 float voltage, phValue;
 DFRobot_PH ph;
 
@@ -160,9 +162,14 @@ void loop()
     consolePrintData();
     Serial.print(", ");
     temperature = tempSensor.getValue();        // read your temperature sensor to execute temperature compensation
+    int readVoltage = analogRead(PH_PIN);
+    Serial.print("==> phVoltage: ");
+    Serial.print(readVoltage);
+
     voltage = analogRead(PH_PIN) / 1024.0 * 5000; // read the voltage
+
     phValue = ph.readPH(voltage, temperature);    // convert voltage to pH with temperature compensation
-    Serial.print("temperature: ");
+    Serial.print(", temperature: ");
     Serial.print(temperature, 1);
     Serial.print("\xC2\xB0");
     Serial.print("C, pH: ");
